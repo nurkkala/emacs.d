@@ -1,0 +1,5 @@
+# -*- coding: utf-8; mode: snippet -*-
+# group: django
+# contributor: Tom Nurkkala <tom@nurknet.com>
+# --
+${1:field_name} = models.EmailField()
