@@ -1,0 +1,4 @@
+= Emacs settings
+
+My emacs settings. 
+Not because they're so awesome, but because I don't want to lose them.
