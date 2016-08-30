@@ -68,26 +68,19 @@
   (setq ns-function-modifier 'none)
   (message "Configured for external keyboard"))
 
-;; Because I normally run emacs from the Mac dock, it gets its execution path not from the
-;; shell, but from launchd.
-(setq added-dirs
-	  (list "/Library/TeX/texbin"
-			"/usr/local/bin"
-			"/Users/tom/bin"
-			(s-concat
-			 (s-trim (shell-command-to-string "/opt/local/bin/python-config --prefix"))
-			 "/bin")))
-(dolist (added-dir added-dirs)
-  (add-to-list 'exec-path added-dir))
+;;;; Initialize paths - https://github.com/purcell/exec-path-from-shell
+(when (memq window-system '(mac ns))
+  (exec-path-from-shell-initialize))
 
 ;; Frame format (emacs-fu.blogspot.com)
 (setq frame-title-format
       '("" invocation-name ": "(:eval (if (buffer-file-name)
 										  (abbreviate-file-name (buffer-file-name)) "%b"))))
+
 ;; Start up the emacs server process.
-(require 'server)
-(unless (server-running-p)
-  (server-start))
+;(require 'server)
+;(unless (server-running-p)
+;  (server-start))
 
 ;; When visiting a log file, enable tailing.
 (add-to-list 'auto-mode-alist '("\\.log\\'" . auto-revert-tail-mode))

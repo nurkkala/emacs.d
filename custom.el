@@ -192,6 +192,7 @@
  '(save-place t nil (saveplace))
  '(send-mail-function (quote smtpmail-send-it))
  '(shell-escape-mode "-shell-escape")
+ '(shell-file-name "/opt/local/bin/bash")
  '(show-paren-mode t)
  '(show-trailing-whitespace t)
  '(size-indication-mode t)

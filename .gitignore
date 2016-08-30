@@ -3,7 +3,6 @@ abbrev_defs
 ac-comphist.dat
 anything-c-adaptive-history
 bookmarks
-ede-projects.el
 elpa/
 request/
 semanticdb/
@@ -11,3 +10,5 @@ url/
 xkcd/
 .python-environments/
 tramp
+places
+recentf
