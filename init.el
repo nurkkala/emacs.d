@@ -10,6 +10,7 @@
 (require 'package)
 (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
+(add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 (package-initialize)
 ;; After ELPA package initialization, can use locally installed libraries.
 
@@ -17,22 +18,23 @@
 
 ;; Key bindings. From emacs manual: Sequences consisting of C-c and a letter (either upper
 ;; or lower case) are reserved for users.
+(global-set-key (kbd "C-c a") 'align-current)
 (global-set-key (kbd "C-c d") 'dash-at-point)
 (global-set-key (kbd "C-c e") 'emmet-expand-line)
 (global-set-key (kbd "C-c g") 'magit-status)
 (global-set-key (kbd "C-c k e") 'external-keyboard)
 (global-set-key (kbd "C-c k i") 'internal-keyboard)
 (global-set-key (kbd "C-c m") 'compile)
+(global-set-key (kbd "C-c o a") 'org-agenda)
+(global-set-key (kbd "C-c o b") 'org-iswitchb)
+(global-set-key (kbd "C-c o c") 'org-capture)
+(global-set-key (kbd "C-c o l") 'org-store-link)
 (global-set-key (kbd "C-c s") 'sort-lines)
 (global-set-key (kbd "C-c t") 'sr-speedbar-toggle)
 (global-set-key (kbd "C-c u") 'untabify)
 (global-set-key (kbd "C-c w") 'delete-trailing-whitespace)
 (global-set-key (kbd "C-c y") 'bury-buffer)
-;(global-set-key (kbd "C-c a") 'org-agenda)
-;(global-set-key (kbd "C-c b") 'org-iswitchb)
-;(global-set-key (kbd "C-c c") 'org-capture)
 ;(global-set-key (kbd "C-c i") 'mu4e)
-;(global-set-key (kbd "C-c l") 'org-store-link)
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
@@ -87,6 +89,10 @@
 
 ;; Allow narrowing to proceed without warning.
 (put 'narrow-to-region 'disabled nil)
+
+;; Spaceline - https://github.com/TheBB/spaceline
+(require 'spaceline-config)
+(spaceline-emacs-theme)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Mode-specific configuration
