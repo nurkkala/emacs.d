@@ -119,6 +119,7 @@
 	 (:maildir . 15)
 	 (:from . 22)
 	 (:subject))))
+ '(mu4e-headers-leave-behavior (quote apply))
  '(mu4e-html2text-command (quote mu4e-shr2text))
  '(mu4e-maildir "/Users/tom/Mail")
  '(mu4e-mu-binary "/usr/local/bin/mu")
@@ -126,16 +127,32 @@
  '(mu4e-user-mail-address-list
    (quote
 	("tom.nurkkala@gmail.com" "thnurkkala@taylor.edu" "tnurkkala@cse.taylor.edu" "tom@nurknet.com" "thnurkkala@tayloru.edu")))
+ '(mu4e-view-auto-mark-as-read nil)
  '(mu4e-view-show-images t)
  '(newsticker-url-list
    (quote
 	(("Slashdot" "http://rss.slashdot.org/Slashdot/slashdot" nil nil nil))))
  '(ns-tool-bar-display-mode (quote both) t)
  '(ns-tool-bar-size-mode (quote regular) t)
+ '(org-agenda-custom-commands
+   (quote
+	(("n" "Agenda and all TODOs"
+	  ((agenda "" nil)
+	   (alltodo "" nil))
+	  nil)
+	 ("x" "Trying out this thingy" agenda "before|after"
+	  ((org-agenda-view-columns-initially t))))))
  '(org-agenda-files
    (quote
-	("~/Org/taylor.org" "~/Org/home.org" "~/Org/galilee.org" "~/Org/refile.org" "~/Org/todo.org" "~/Taylor/Classes/2017-2018/Fall/COS 243 - MWAD/cos-243-outline.org")))
+	("~/Taylor/Classes/2017-2018/Fall/COS 343 - ADBC/plan/cos-343-outline.org" "~/Taylor/Classes/2017-2018/Fall/COS 243 - MWAD/plan/cos-243-outline.org" "~/Org/org-notes.org" "~/Org/sys-admin.org" "~/Org/taylor.org" "~/Org/home.org" "~/Org/galilee.org" "~/Org/refile.org")))
+ '(org-agenda-sorting-strategy
+   (quote
+	((agenda habit-down time-up priority-down category-keep)
+	 (todo timestamp-up)
+	 (tags priority-down category-keep)
+	 (search category-keep))))
  '(org-agenda-start-on-weekday 0)
+ '(org-babel-js-cmd "NODE_PATH=$PWD/node_modules node")
  '(org-babel-load-languages
    (quote
 	((emacs-lisp . t)
@@ -156,6 +173,7 @@
 	  "* %?
 %U
 "))))
+ '(org-catch-invisible-edits (quote smart))
  '(org-checkbox-hierarchical-statistics nil)
  '(org-clock-continuously nil)
  '(org-clock-into-drawer t)
@@ -167,6 +185,7 @@
  '(org-export-with-sub-superscripts (quote {}))
  '(org-hierarchical-checkbox-statistics nil)
  '(org-hierarchical-todo-statistics nil)
+ '(org-latex-active-timestamp-format "{\\color{gray}\\footnotesize\\textsf{%s}}")
  '(org-latex-classes
    (quote
 	(("article" "\\documentclass[11pt]{article}"
@@ -190,6 +209,7 @@
 	 ("syllabus" "\\documentclass{article}"
 	  ("\\section{%s}" . "\\section*{%s}")
 	  ("\\subsection{%s}" . "\\subsection*{%s}")))))
+ '(org-latex-format-headline-function (quote nurk/org-latex-format-headline-function))
  '(org-latex-hyperref-template
    "\\hypersetup{
  pdfauthor={%a},
@@ -201,40 +221,72 @@
  colorlinks=true,
  allcolors=blue}
 ")
+ '(org-latex-inactive-timestamp-format "{\\color{gray}\\footnotesize\\textsf{%s}}")
  '(org-latex-listings (quote minted))
- '(org-latex-minted-options (quote (("frame" "single") ("breaklines" ""))))
+ '(org-latex-minted-options
+   (quote
+	(("frame" "single")
+	 ("breaklines" "")
+	 ("linenos" "")
+	 ("numberblanklines" "false")
+	 ("autogobble" "")
+	 ("tabsize" "4"))))
  '(org-latex-packages-alist
    (quote
 	(("" "booktabs" nil)
 	 ("" "minted" nil)
-	 ("" "tikz" nil))))
- '(org-latex-pdf-process
-   (quote
-	("%latex -shell-escape -interaction nonstopmode -output-directory %o %f" "%latex -shell-escape -interaction nonstopmode -output-directory %o %f" "%latex -shell-escape -interaction nonstopmode -output-directory %o %f")))
+	 ("" "tikz" t))))
+ '(org-latex-pdf-process (quote ("latexmk %f")))
  '(org-list-allow-alphabetical nil)
  '(org-log-done (quote time))
  '(org-log-into-drawer t)
  '(org-log-note-clock-out t)
  '(org-mobile-files (quote (org-agenda-files "tenure-app.org")))
  '(org-outline-path-complete-in-steps nil)
+ '(org-preview-latex-default-process (quote imagemagick))
+ '(org-preview-latex-image-directory "_org_ltximg/")
  '(org-refile-allow-creating-parent-nodes (quote confirm))
  '(org-refile-targets (quote ((org-agenda-files :maxlevel . 3))))
  '(org-refile-use-outline-path t)
  '(org-src-fontify-natively t)
+ '(org-src-lang-modes
+   (quote
+	(("ocaml" . tuareg)
+	 ("elisp" . emacs-lisp)
+	 ("ditaa" . artist)
+	 ("asymptote" . asy)
+	 ("dot" . fundamental)
+	 ("sqlite" . sql)
+	 ("calc" . fundamental)
+	 ("C" . c)
+	 ("cpp" . c++)
+	 ("C++" . c++)
+	 ("screen" . shell-script)
+	 ("shell" . sh)
+	 ("bash" . sh))))
  '(org-src-preserve-indentation t)
  '(org-startup-folded (quote content))
  '(org-startup-indented t)
  '(org-use-sub-superscripts (quote {}))
+ '(org-use-tag-inheritance nil)
  '(package-selected-packages
    (quote
-	(hydra zenburn-theme org-mime emacsql-mysql emacsql-sqlite emacsql slime org color-theme-sanityinc-tomorrow cuda-mode bbdb homebrew-mode ox-asciidoc ox-rst toc-org hl-spotlight typescript-mode yaml-mode xkcd web-mode web-completion-data undo-tree swiper stem ssh-config-mode ssh sr-speedbar spacemacs-theme spaceline solarized-theme rich-minority restclient projectile pdf-tools paredit ox-tufte ox-pandoc ox-gfm org-trello org-ref org-mac-link org-bullets org-beautify-theme offlineimap nginx-mode mu4e-maildirs-extension minimap math-symbol-lists markdown-toc markdown-preview-mode magit-gitflow link less-css-mode latex-preview-pane json-mode js3-mode js2-refactor highlight-indentation hide-lines helm-ls-git helm-descbinds helm-dash helm-chrome helm-ag goto-chg gitignore-mode ggtags flycheck-pyflakes find-file-in-project fill-column-indicator exec-path-from-shell epc emmet-mode dict-tree dash-at-point csv-mode css-mode coffee-mode auto-complete auctex-latexmk adoc-mode)))
+	(exec-path-from-shell sublimity org ag hydra zenburn-theme org-mime emacsql-mysql emacsql-sqlite emacsql slime color-theme-sanityinc-tomorrow cuda-mode bbdb homebrew-mode ox-asciidoc ox-rst toc-org hl-spotlight typescript-mode yaml-mode xkcd web-mode web-completion-data undo-tree swiper stem ssh-config-mode ssh sr-speedbar spacemacs-theme spaceline solarized-theme rich-minority restclient projectile pdf-tools paredit ox-tufte ox-pandoc ox-gfm org-trello org-ref org-mac-link org-bullets org-beautify-theme offlineimap nginx-mode mu4e-maildirs-extension math-symbol-lists markdown-toc markdown-preview-mode magit-gitflow link less-css-mode latex-preview-pane json-mode js3-mode js2-refactor highlight-indentation hide-lines helm-ls-git helm-descbinds helm-dash helm-chrome helm-ag goto-chg gitignore-mode ggtags flycheck-pyflakes find-file-in-project fill-column-indicator epc emmet-mode dict-tree dash-at-point csv-mode css-mode coffee-mode auto-complete auctex-latexmk adoc-mode)))
+ '(preview-default-preamble
+   (quote
+	("\\RequirePackage["
+	 ("," . preview-default-option-list)
+	 "]{preview}[2004/11/05]" "\\PreviewEnvironment{tikzpicture}")))
+ '(preview-image-type (quote dvipng))
  '(recentf-mode t)
  '(reftex-plug-into-AUCTeX t)
  '(reftex-ref-style-default-list (quote ("Default" "Hyperref")))
  '(rw-hunspell-dicpath-list (quote ("/opt/local/share/hunspell")))
  '(safe-local-variable-values
    (quote
-	((TeX-master . qrs-tee-erd-hw)
+	((org-export-top-level-file . slides\.org)
+	 (org-export-top-level-file . "./slides.org")
+	 (TeX-master . qrs-tee-erd-hw)
 	 (engine . django)
 	 (pyvenv-workon . brook)
 	 (TeX-engine . "lualatex")

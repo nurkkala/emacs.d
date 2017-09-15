@@ -52,6 +52,7 @@
 ;; Bindings that stick around - https://github.com/abo-abo/hydra/wiki
 ;; Some bindings are from the hydra examples.
 (require 'hydra)
+(require 'org-agenda)					;Access to org-agenda-mode-map
 
 (defhydra hydra-org-globals ()
   "org"
@@ -72,47 +73,6 @@
   ("g" text-scale-increase "in")
   ("l" text-scale-decrease "out"))
 (global-set-key (kbd "<f2>") 'hydra-zoom/body)
-
-;; Example 12: org-agenda-view
-(defun org-agenda-cts ()
-  (and (eq major-mode 'org-agenda-mode)
-       (let ((args (get-text-property
-                    (min (1- (point-max)) (point))
-                    'org-last-args)))
-         (nth 2 args))))
-
-(defhydra hydra-org-agenda-view (:hint none)
-  "
-_d_: ?d? day        _g_: time grid=?g?  _a_: arch-trees
-_w_: ?w? week       _[_: inactive       _A_: arch-files
-_t_: ?t? fortnight  _f_: follow=?f?     _r_: clock report=?r?
-_m_: ?m? month      _e_: entry text=?e? _D_: include diary=?D?
-_y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
-  ("SPC" org-agenda-reset-view)
-  ("d" org-agenda-day-view (if (eq 'day (org-agenda-cts)) "[x]" "[ ]"))
-  ("w" org-agenda-week-view (if (eq 'week (org-agenda-cts)) "[x]" "[ ]"))
-  ("t" org-agenda-fortnight-view (if (eq 'fortnight (org-agenda-cts)) "[x]" "[ ]"))
-  ("m" org-agenda-month-view (if (eq 'month (org-agenda-cts)) "[x]" "[ ]"))
-  ("y" org-agenda-year-view (if (eq 'year (org-agenda-cts)) "[x]" "[ ]"))
-  ("l" org-agenda-log-mode (format "% -3S" org-agenda-show-log))
-  ("L" (org-agenda-log-mode '(4)))
-  ("c" (org-agenda-log-mode 'clockcheck))
-  ("f" org-agenda-follow-mode (format "% -3S" org-agenda-follow-mode))
-  ("a" org-agenda-archives-mode)
-  ("A" (org-agenda-archives-mode 'files))
-  ("r" org-agenda-clockreport-mode (format "% -3S" org-agenda-clockreport-mode))
-  ("e" org-agenda-entry-text-mode (format "% -3S" org-agenda-entry-text-mode))
-  ("g" org-agenda-toggle-time-grid (format "% -3S" org-agenda-use-time-grid))
-  ("D" org-agenda-toggle-diary (format "% -3S" org-agenda-include-diary))
-  ("!" org-agenda-toggle-deadlines)
-  ("[" (let ((org-agenda-include-inactive-timestamps t))
-         (org-agenda-check-type t 'timeline 'agenda)
-         (org-agenda-redo)
-         (message "Display now includes inactive timestamps as well")))
-  ("q" (message "Abort") :exit t)
-  ("v" nil))
-
-(define-key org-agenda-mode-map "v" 'hydra-org-agenda-view/body)
 
 ;; Modifier bindings
 (defun internal-keyboard ()
@@ -203,11 +163,11 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
 ;; (helm-projectile-on)
 ;; (setq projectile-switch-project-action 'helm-projectile)
 
-;;;; Javacsript JS2 - https://github.com/mooz/js2-mode
+;;;; JavaScript JS2 - https://github.com/mooz/js2-mode
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
 (add-hook 'js2-mode-hook (lambda () (setq comment-start "// ")))
-(add-hook 'js2-mode-hook #'js2-refactor-mode) ;What is #' ??
-(js2r-add-keybindings-with-prefix "C-c r")
+;(add-hook 'js2-mode-hook #'js2-refactor-mode) ;What is #' ??
+;(js2r-add-keybindings-with-prefix "C-c r")
 
 ;;;; AUCTeX - https://www.gnu.org/software/auctex/
 (require 'tex-site)
@@ -230,7 +190,36 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
 ;; (require 'org-mac-link)
 ;; (add-hook 'org-mode-hook 'flyspell-mode)
 ;; (add-hook 'org-mode-hook (lambda () (define-key org-mode-map (kbd "C-c g") 'org-mac-grab-link)))
-(require 'hydra-ox)						;Enable hydra bindings for export
+(require 'ox)
+
+(defun nurk/org-export-filter-src-block (text backend info)
+  "Compress multiple blank lines in source block to single line.
+This makes source blocks look better on export when they contain
+noweb references that are stripped using strip-export"
+  (replace-regexp-in-string "^\n+" "\n" text))
+
+(add-to-list 'org-export-filter-src-block-functions 'nurk/org-export-filter-src-block)
+
+(defun maybe-insert-file (backend)
+  (if (and (local-variable-p 'org-export-top-level-file)
+		   (org-export-derived-backend-p backend 'latex))
+	  (if (file-readable-p org-export-top-level-file)
+		  (progn
+			(goto-char (point-min))
+			(insert-file-contents org-export-top-level-file))
+		(warn "Can't locate top-level file '%s'" org-export-top-level-file))))
+
+(add-hook 'org-export-before-processing-hook 'maybe-insert-file)
+
+(defun nurk/org-latex-format-headline-function (todo _todo-type priority text tags _info)
+  "Tom's formatting function."
+  (concat
+   (and todo (format "{\\color{orange}\\footnotesize\\sffamily %s} " todo))
+   (and priority (format "\\framebox{\\#%c} " priority))
+   text
+   (and tags
+		(format "\\hfill{}\\textsc{%s}"
+				(mapconcat #'org-latex--protect-text tags ":")))))
 
 ;;;; Markdown Mode - http://jblevins.org/projects/markdown-mode/
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
@@ -292,8 +281,6 @@ _y_: ?y? year       _q_: quit           _L__l__c_: log = ?l?"
 (add-to-list 'mu4e-view-actions
 			 '("ViewInBrowser" . mu4e-action-view-in-browser) t)
 
-(setq mu4e-context-policy 'ask)
-(setq mu4e-compose-context-policy 'ask)
 (setq mu4e-contexts
 	  `( ,(make-mu4e-context
 		   :name "Nurk Net"
