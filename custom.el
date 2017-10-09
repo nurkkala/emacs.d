@@ -25,7 +25,6 @@
    (quote
 	("bfdcbf0d33f3376a956707e746d10f3ef2d8d9caa1c214361c9c08f00a1c8409" "2997ecd20f07b99259bddba648555335ffb7a7d908d8d3e6660ecbec415f6b95" "628278136f88aa1a151bb2d6c8a86bf2b7631fbea5f0f76cba2a0079cd910f7d" "1b8d67b43ff1723960eb5e0cba512a2c7a2ad544ddb2533a90101fd1852b426e" "bb08c73af94ee74453c90422485b29e5643b73b05e8de029a6909af6a3fb3f58" "06f0b439b62164c6f8f84fdda32b62fb50b6d00e8b01c2208e55543a6337433a" "4e753673a37c71b07e3026be75dc6af3efbac5ce335f3707b7d6a110ecb636a3" "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088" "0e219d63550634bc5b0c214aced55eb9528640377daf486e13fb18a32bf39856" "dd4db38519d2ad7eb9e2f30bc03fba61a7af49a185edfd44e020aa5345e3dca7" "cdbd0a803de328a4986659d799659939d13ec01da1f482d838b68038c1bb35e8" "40f6a7af0dfad67c0d4df2a1dd86175436d79fc69ea61614d668a635c2cd94ab" "708df3cbb25425ccbf077a6e6f014dc3588faba968c90b74097d11177b711ad1" "68d36308fc6e7395f7e6355f92c1dd9029c7a672cbecf8048e2933a053cf27e6" "0ad5a61e6ee6d2e7f884c0da7a6f437a4c84547514b509bdffd06757a8fc751f" "df3e05e16180d77732ceab47a43f2fcdb099714c1c47e91e8089d2fcf5882ea3" "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476" "f5eb916f6bd4e743206913e6f28051249de8ccfd070eae47b5bde31ee813d55f" "11636897679ca534f0dec6f5e3cb12f28bf217a527755f6b9e744bd240ed47e1" "19352d62ea0395879be564fc36bc0b4780d9768a964d26dfae8aad218062858d" "a444b2e10bedc64e4c7f312a737271f9a2f2542c67caa13b04d525196562bf38" "2e5705ad7ee6cfd6ab5ce81e711c526ac22abed90b852ffaf0b316aa7864b11f" "b06aaf5cefc4043ba018ca497a9414141341cb5a2152db84a9a80020d35644d1" "3dafeadb813a33031848dfebfa0928e37e7a3c18efefa10f3e9f48d1993598d3" "a8245b7cc985a0610d71f9852e9f2767ad1b852c2bdea6f4aadc12cce9c4d6d0" "1db337246ebc9c083be0d728f8d20913a0f46edc0a00277746ba411c149d7fe5" "d677ef584c6dfc0697901a44b885cc18e206f05114c8a3b7fde674fce6180879" "8aebf25556399b58091e533e455dd50a6a9cba958cc4ebb0aab175863c25b9a4" "6a9606327ecca6e772fba6ef46137d129e6d1888dcfc65d0b9b27a7a00a4af20" default)))
  '(desktop-save-mode t)
- '(display-time-mode nil)
  '(elpy-mode-hook (quote (hl-line-mode)))
  '(emmet-indentation 2)
  '(eval-expression-print-length 200)
@@ -110,6 +109,7 @@
  '(mu4e-compose-dont-reply-to-self t)
  '(mu4e-compose-signature t)
  '(mu4e-compose-signature-auto-include nil)
+ '(mu4e-date-format-long "%a/%d-%b-$Y")
  '(mu4e-get-mail-command "/usr/local/bin/offlineimap -o")
  '(mu4e-headers-fields
    (quote
@@ -161,6 +161,7 @@
 	 (sql . t)
 	 (latex . t)
 	 (js . t))))
+ '(org-babel-python-command "python3")
  '(org-capture-templates
    (quote
 	(("t" "To Do" entry
@@ -228,7 +229,6 @@
 	(("frame" "single")
 	 ("breaklines" "")
 	 ("linenos" "")
-	 ("numberblanklines" "false")
 	 ("autogobble" "")
 	 ("tabsize" "4"))))
  '(org-latex-packages-alist
@@ -284,7 +284,8 @@
  '(rw-hunspell-dicpath-list (quote ("/opt/local/share/hunspell")))
  '(safe-local-variable-values
    (quote
-	((org-export-top-level-file . slides\.org)
+	((org-export-top-level-file . "./slides-foo.org")
+	 (org-export-top-level-file . slides\.org)
 	 (org-export-top-level-file . "./slides.org")
 	 (TeX-master . qrs-tee-erd-hw)
 	 (engine . django)

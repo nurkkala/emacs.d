@@ -117,6 +117,12 @@
 (require 'spaceline-config)
 (spaceline-emacs-theme)
 
+;; Non-ASCII (https://www.emacswiki.org/emacs/FindingNonAsciiCharacters)
+(defun occur-non-ascii ()
+  "Find any non-ascii characters in the current buffer."
+  (interactive)
+  (occur "[^[:ascii:]]"))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Mode-specific configuration
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -200,7 +206,12 @@ noweb references that are stripped using strip-export"
 
 (add-to-list 'org-export-filter-src-block-functions 'nurk/org-export-filter-src-block)
 
-(defun maybe-insert-file (backend)
+(defun nurk/maybe-insert-file (backend)
+  "Maybe insert a file at the beginning of an Org file.
+Checks the value of buffer-local variable
+org-export-top-level-file; if it contains the path to a readable
+file and the BACKEND is derived from LaTeX, insert the file at
+the beginning of the Org buffer."
   (if (and (local-variable-p 'org-export-top-level-file)
 		   (org-export-derived-backend-p backend 'latex))
 	  (if (file-readable-p org-export-top-level-file)
@@ -209,7 +220,7 @@ noweb references that are stripped using strip-export"
 			(insert-file-contents org-export-top-level-file))
 		(warn "Can't locate top-level file '%s'" org-export-top-level-file))))
 
-(add-hook 'org-export-before-processing-hook 'maybe-insert-file)
+(add-hook 'org-export-before-processing-hook 'nurk/maybe-insert-file)
 
 (defun nurk/org-latex-format-headline-function (todo _todo-type priority text tags _info)
   "Tom's formatting function."
@@ -281,6 +292,12 @@ noweb references that are stripped using strip-export"
 (add-to-list 'mu4e-view-actions
 			 '("ViewInBrowser" . mu4e-action-view-in-browser) t)
 
+(setq nurk/fancy-sig (concat "Tom Nurkkala, PhD\n"
+							 "Associate Professor, Computer Science and Engineering\n"
+							 "Director, Center for Missions Computing\n"
+							 "Taylor University\n"))
+(setq nurk/simple-sig "Tom Nurkkala\n")
+
 (setq mu4e-contexts
 	  `( ,(make-mu4e-context
 		   :name "Nurk Net"
@@ -290,7 +307,8 @@ noweb references that are stripped using strip-export"
 		   :vars '((user-mail-address . "tom@nurknet.com")
 				   (mu4e-sent-folder . "/nurknet/Sent")
 				   (mu4e-trash-folder . "/nurknet/Trash")
-				   (mu4e-refile-folder . "/nurknet/Archive")))
+				   (mu4e-refile-folder . "/nurknet/Archive")
+				   (mu4e-compose-signature . nurk/simple-sig)))
 		 ,(make-mu4e-context
 		   :name "Department"
 		   :match-func (lambda (msg)
@@ -299,7 +317,8 @@ noweb references that are stripped using strip-export"
 		   :vars '((user-mail-address . "tnurkkala@cse.taylor.edu")
 				   (mu4e-sent-folder . "/cse/Sent")
 				   (mu4e-trash-folder . "/cse/Trash")
-				   (mu4e-refile-folder . "/cse/Archive")))
+				   (mu4e-refile-folder . "/cse/Archive")
+				   (mu4e-compose-signature . nurk/fancy-sig)))
 		 ,(make-mu4e-context
 		   :name "Campus"
 		   :match-func (lambda (msg)
@@ -308,7 +327,8 @@ noweb references that are stripped using strip-export"
 		   :vars '((user-mail-address . "thnurkkala@taylor.edu")
 				   (mu4e-sent-folder . "/campus/Sent")
 				   (mu4e-trash-folder . "/campus/Trash")
-				   (mu4e-refile-folder . "/campus/Archive")))
+				   (mu4e-refile-folder . "/campus/Archive")
+				   (mu4e-compose-signature . nurk/fancy-sig)))
 		 ,(make-mu4e-context
 		   :name "Gmail"
 		   :match-func (lambda (msg)
@@ -317,7 +337,8 @@ noweb references that are stripped using strip-export"
 		   :vars '((user-mail-address . "tom.nurkkala@gmail.com")
 				   (mu4e-sent-folder . "/gmail/[Gmail].Sent Mail")
 				   (mu4e-trash-folder . "/gmail/[Gmail].Trash")
-				   (mu4e-refile-folder . "/gmail/[Gmail].Archive")))
+				   (mu4e-refile-folder . "/gmail/[Gmail].Archive")
+				   (mu4e-compose-signature . nurk/simple-sig)))
 		 ))
 
 (defun nurk/mu4e-compose-stuff ()
