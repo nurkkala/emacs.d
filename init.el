@@ -11,7 +11,7 @@
 ;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
 ;(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
-;(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+(add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
 (package-initialize)
 ;; After ELPA package initialization, can use locally installed libraries.
 
@@ -60,7 +60,7 @@
   ("b" org-iswitchb "switch buffer")
   ("c" org-capture "capture")
   ("l" org-store-link "store link"))
-(global-set-key (kbd "<f3>") 'hydra-org-globals/body)
+(global-set-key (kbd "<f5>") 'hydra-org-globals/body)
 ;; Was
 ;;  (global-set-key (kbd "C-c o a") 'org-agenda)
 ;;  (global-set-key (kbd "C-c o b") 'org-iswitchb)
@@ -72,7 +72,7 @@
   "zoom"
   ("g" text-scale-increase "in")
   ("l" text-scale-decrease "out"))
-(global-set-key (kbd "<f2>") 'hydra-zoom/body)
+(global-set-key (kbd "<f6>") 'hydra-zoom/body)
 
 ;; Modifier bindings
 (defun internal-keyboard ()
@@ -193,10 +193,16 @@
 (auctex-latexmk-setup)
 
 ;;;; Org Mode - http://orgmode.org/
+(add-to-list 'load-path "~/Org")
+(require 'org-faraday)
+
 ;; (require 'org-mac-link)
 ;; (add-hook 'org-mode-hook 'flyspell-mode)
 ;; (add-hook 'org-mode-hook (lambda () (define-key org-mode-map (kbd "C-c g") 'org-mac-grab-link)))
 (require 'ox)
+
+(require 'ob-mongo "~/.emacs.d/src/ob-mongo/ob-mongo.el")
+(add-to-list 'org-babel-load-languages '(mongo . t))
 
 (defun nurk/org-export-filter-src-block (text backend info)
   "Compress multiple blank lines in source block to single line.
@@ -223,7 +229,7 @@ the beginning of the Org buffer."
 (add-hook 'org-export-before-processing-hook 'nurk/maybe-insert-file)
 
 (defun nurk/org-latex-format-headline-function (todo _todo-type priority text tags _info)
-  "Tom's formatting function."
+  "Format headlines nicely for LaTeX export."
   (concat
    (and todo (format "{\\color{orange}\\footnotesize\\sffamily %s} " todo))
    (and priority (format "\\framebox{\\#%c} " priority))
@@ -265,6 +271,7 @@ the beginning of the Org buffer."
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (load-theme 'zenburn)
+;;(load-theme 'oceanic)
 ;; (load-theme 'sanityinc-tomorrow-night)
 ;; (load-theme 'spacemacs-dark)
 
@@ -272,13 +279,16 @@ the beginning of the Org buffer."
 ;; Mail
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Try out WanderLust
+; (require 'wl)
+
 ;; Using this strategy to install mu/mu4e:
 ;;   http://blog.danielgempesaw.com/post/43467552978/installing-mu-and-mu4e-with-homebrew-with-emacs
 ;; See also
 ;;   http://pragmaticemacs.com/emacs/master-your-inbox-with-mu4e-and-org-mode/
 ;;   http://www.macs.hw.ac.uk/~rs46/posts/2014-01-13-mu4e-email-client.html
 
-(add-to-list 'load-path "/usr/local/Cellar/mu/0.9.18_1/share/emacs/site-lisp/mu/mu4e")
+(add-to-list 'load-path "/usr/local/Cellar/mu/1.0/share/emacs/site-lisp/mu/mu4e")
 (require 'mu4e)
 (require 'org-mu4e)
 
@@ -304,41 +314,41 @@ the beginning of the Org buffer."
 		   :match-func (lambda (msg)
 						 (when msg
 						   (mu4e-message-contact-field-matches msg :to "@nurknet.com")))
-		   :vars '((user-mail-address . "tom@nurknet.com")
+		   :vars `((user-mail-address . "tom@nurknet.com")
 				   (mu4e-sent-folder . "/nurknet/Sent")
 				   (mu4e-trash-folder . "/nurknet/Trash")
 				   (mu4e-refile-folder . "/nurknet/Archive")
-				   (mu4e-compose-signature . nurk/simple-sig)))
+				   (mu4e-compose-signature . ,nurk/simple-sig)))
 		 ,(make-mu4e-context
 		   :name "Department"
 		   :match-func (lambda (msg)
 						 (when msg
 						   (mu4e-message-contact-field-matches msg :to "@cse.taylor.edu")))
-		   :vars '((user-mail-address . "tnurkkala@cse.taylor.edu")
+		   :vars `((user-mail-address . "tnurkkala@cse.taylor.edu")
 				   (mu4e-sent-folder . "/cse/Sent")
 				   (mu4e-trash-folder . "/cse/Trash")
 				   (mu4e-refile-folder . "/cse/Archive")
-				   (mu4e-compose-signature . nurk/fancy-sig)))
+				   (mu4e-compose-signature . ,nurk/fancy-sig)))
 		 ,(make-mu4e-context
 		   :name "Campus"
 		   :match-func (lambda (msg)
 						 (when msg
 						   (mu4e-message-contact-field-matches msg :to "@taylor.edu")))
-		   :vars '((user-mail-address . "thnurkkala@taylor.edu")
+		   :vars `((user-mail-address . "thnurkkala@taylor.edu")
 				   (mu4e-sent-folder . "/campus/Sent")
 				   (mu4e-trash-folder . "/campus/Trash")
 				   (mu4e-refile-folder . "/campus/Archive")
-				   (mu4e-compose-signature . nurk/fancy-sig)))
+				   (mu4e-compose-signature . ,nurk/fancy-sig)))
 		 ,(make-mu4e-context
 		   :name "Gmail"
 		   :match-func (lambda (msg)
 						 (when msg
 						   (mu4e-message-contact-field-matches msg :to "@gmail.com")))
-		   :vars '((user-mail-address . "tom.nurkkala@gmail.com")
+		   :vars `((user-mail-address . "tom.nurkkala@gmail.com")
 				   (mu4e-sent-folder . "/gmail/[Gmail].Sent Mail")
 				   (mu4e-trash-folder . "/gmail/[Gmail].Trash")
 				   (mu4e-refile-folder . "/gmail/[Gmail].Archive")
-				   (mu4e-compose-signature . nurk/simple-sig)))
+				   (mu4e-compose-signature . ,nurk/simple-sig)))
 		 ))
 
 (defun nurk/mu4e-compose-stuff ()
