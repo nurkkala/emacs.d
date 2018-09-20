@@ -40,11 +40,6 @@
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
-(global-set-key (kbd "C-x b") 'helm-mini)
-(global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "M-y") 'helm-show-kill-ring)
-
 ;; Disable ns-win binding of ns-print-buffer, which causes no end of grief.
 (global-unset-key (kbd "s-p"))
 
@@ -52,6 +47,16 @@
 (setq nurk/modest-scroll-lines 2)
 (global-set-key (kbd "M-n") (lambda () (interactive) (scroll-up nurk/modest-scroll-lines)))
 (global-set-key (kbd "M-p") (lambda () (interactive) (scroll-down nurk/modest-scroll-lines)))
+
+;; AVY -- https://github.com/abo-abo/avy
+(require 'avy)
+(global-set-key (kbd "C-:") 'avy-goto-char)
+(global-set-key (kbd "C-'") 'avy-goto-char-2)
+(global-set-key (kbd "M-g f") 'avy-goto-line)
+(global-set-key (kbd "M-g w") 'avy-goto-word-1)
+(global-set-key (kbd "M-g e") 'avy-goto-word-0)
+(avy-setup-default)						;For isearch
+(global-set-key (kbd "C-c C-j") 'avy-resume)
 
 ;; Bindings that stick around - https://github.com/abo-abo/hydra/wiki
 ;; Some bindings are from the hydra examples.
@@ -117,9 +122,13 @@
 ;; Allow narrowing to proceed without warning.
 (put 'narrow-to-region 'disabled nil)
 
-;; Spaceline - https://github.com/TheBB/spaceline
-(require 'spaceline-config)
-(spaceline-emacs-theme)
+;; ;; Spaceline - https://github.com/TheBB/spaceline
+;; (require 'spaceline-config)
+;; (spaceline-emacs-theme)
+
+;; Smart Mode Line - https://github.com/Malabarba/smart-mode-line
+(sml/setup)
+(load-theme 'smart-mode-line-powerline)
 
 ;; Non-ASCII (https://www.emacswiki.org/emacs/FindingNonAsciiCharacters)
 (defun occur-non-ascii ()
@@ -163,15 +172,15 @@
 ;;;; Helm - https://emacs-helm.github.io/helm/
 (require 'helm)
 (helm-mode 1)
+
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "C-x b") 'helm-mini)
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+
 (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
 (define-key helm-map (kbd "C-z") 'helm-select-action)
-
-;;;; Projectile - http://batsov.com/projectile/
-;; (projectile-global-mode)
-;; (setq projectile-completion-system 'helm)
-;; (helm-projectile-on)
-;; (setq projectile-switch-project-action 'helm-projectile)
 
 ;;;; JavaScript JS2 - https://github.com/mooz/js2-mode
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
@@ -280,7 +289,7 @@ the beginning of the Org buffer."
 ;; Theming
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(load-theme 'zenburn)
+;(load-theme 'zenburn)
 ;; (load-theme 'oceanic)
 ;; (load-theme 'sanityinc-tomorrow-night)
 ;; (load-theme 'spacemacs-dark)
