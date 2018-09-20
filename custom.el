@@ -248,7 +248,6 @@
 	 ("" "minted" nil)
 	 ("" "tikz" t))))
  '(org-latex-pdf-process (quote ("latexmk %f")))
- '(org-latex-title-command "\\begin{frame}\\maketitle\\end{frame}")
  '(org-list-allow-alphabetical nil)
  '(org-log-done (quote time))
  '(org-log-into-drawer t)
@@ -283,7 +282,9 @@
  '(org-use-tag-inheritance nil)
  '(package-selected-packages
    (quote
-	(htmlize oceanic-theme js-comint exec-path-from-shell sublimity org ag hydra zenburn-theme org-mime emacsql-mysql emacsql-sqlite emacsql slime color-theme-sanityinc-tomorrow cuda-mode bbdb homebrew-mode ox-asciidoc ox-rst toc-org hl-spotlight typescript-mode yaml-mode xkcd web-mode web-completion-data undo-tree swiper stem ssh-config-mode ssh sr-speedbar spacemacs-theme spaceline solarized-theme rich-minority restclient projectile pdf-tools paredit ox-tufte ox-pandoc ox-gfm org-trello org-ref org-mac-link org-bullets org-beautify-theme offlineimap nginx-mode mu4e-maildirs-extension math-symbol-lists markdown-toc markdown-preview-mode magit-gitflow link less-css-mode latex-preview-pane json-mode js3-mode js2-refactor highlight-indentation hide-lines helm-ls-git helm-descbinds helm-dash helm-chrome helm-ag goto-chg gitignore-mode ggtags flycheck-pyflakes find-file-in-project fill-column-indicator epc emmet-mode dict-tree dash-at-point csv-mode css-mode coffee-mode auto-complete auctex-latexmk adoc-mode)))
+	(magit paradox yasnippet auctex s org htmlize oceanic-theme js-comint exec-path-from-shell sublimity ag hydra zenburn-theme org-mime emacsql-mysql emacsql-sqlite emacsql slime color-theme-sanityinc-tomorrow cuda-mode bbdb homebrew-mode ox-asciidoc ox-rst toc-org hl-spotlight typescript-mode yaml-mode xkcd web-mode web-completion-data undo-tree swiper stem ssh-config-mode ssh sr-speedbar spacemacs-theme spaceline solarized-theme rich-minority restclient projectile pdf-tools paredit ox-tufte ox-pandoc ox-gfm org-trello org-ref org-mac-link org-bullets org-beautify-theme offlineimap nginx-mode mu4e-maildirs-extension math-symbol-lists markdown-toc markdown-preview-mode magit-gitflow link less-css-mode latex-preview-pane json-mode js3-mode js2-refactor highlight-indentation hide-lines helm-ls-git helm-descbinds helm-dash helm-chrome helm-ag goto-chg gitignore-mode ggtags flycheck-pyflakes find-file-in-project fill-column-indicator epc emmet-mode dict-tree dash-at-point csv-mode css-mode coffee-mode auto-complete auctex-latexmk adoc-mode)))
+ '(paradox-automatically-star t)
+ '(paradox-github-token "9b9177438faa75f2f3a2a65411fe03ec5edb1450")
  '(preview-default-preamble
    (quote
 	("\\RequirePackage["
