@@ -170,17 +170,28 @@
 (add-hook 'web-mode-hook 'nurk/web-mode-hook)
 
 ;;;; Helm - https://emacs-helm.github.io/helm/
-(require 'helm)
-(helm-mode 1)
+(defun enable-helm ()
+  (require 'helm)
 
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
-(global-set-key (kbd "C-x b") 'helm-mini)
-(global-set-key (kbd "M-x") 'helm-M-x)
-(global-set-key (kbd "M-y") 'helm-show-kill-ring)
+  (global-set-key (kbd "C-x C-f") 'helm-find-files)
+  (global-set-key (kbd "C-x b") 'helm-mini)
+  (global-set-key (kbd "M-x") 'helm-M-x)
+  (global-set-key (kbd "M-y") 'helm-show-kill-ring)
 
-(define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-(define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
-(define-key helm-map (kbd "C-z") 'helm-select-action)
+  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
+  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
+  (define-key helm-map (kbd "C-z") 'helm-select-action)
+  (helm-mode 1))
+
+;; (enable-helm)
+
+;;  Ivy -- http://oremacs.com/swiper/
+(defun enable-ivy ()
+  (require 'ivy)
+  (counsel-mode 1)
+  (ivy-mode 1))
+
+(enable-ivy)
 
 ;;;; JavaScript JS2 - https://github.com/mooz/js2-mode
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
@@ -279,7 +290,7 @@ the beginning of the Org buffer."
 
 ;; Turn on fill-column indicator
 (require 'fill-column-indicator)
-(fci-mode)
+(fci-mode 1)
 
 ;; GIFT mode
 (add-to-list 'load-path "~/.emacs.d/gift-mode")
