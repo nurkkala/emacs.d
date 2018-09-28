@@ -8,12 +8,9 @@
 
 ;; ELPA - Set up packages early so that they can be used from within this file.
 (require 'package)
-;(add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/"))
-;(add-to-list 'package-archives '("melpa" . "http://melpa.milkbox.net/packages/"))
 (add-to-list 'package-archives '("melpa-stable" . "https://stable.melpa.org/packages/"))
 (add-to-list 'package-archives '("org" . "https://orgmode.org/elpa/") t)
-(package-initialize)
-;; After ELPA package initialization, can use locally installed libraries.
+(package-initialize)				 ; Can now use locally-installed libraries.
 
 ;; Paradox -- https://github.com/Malabarba/paradox
 (require 'paradox)
@@ -21,23 +18,20 @@
 
 (require 's)							;String library
 
-;; Key bindings. From emacs manual: Sequences consisting of C-c and a letter (either upper
-;; or lower case) are reserved for users.
+;; Key bindings. From emacs manual: Sequences consisting of C-c and a letter
+;; (either upper or lower case) are reserved for users.
 (global-set-key (kbd "C-c a") 'align-current)
 (global-set-key (kbd "C-c c") 'compile)
-;; (global-set-key (kbd "C-c d") 'dash-at-point)
 (global-set-key (kbd "C-c e") 'emmet-expand-line)
 (global-set-key (kbd "C-c g") 'magit-status)
 (global-set-key (kbd "C-c i") 'ispell-buffer)
 (global-set-key (kbd "C-c k e") 'external-keyboard)
 (global-set-key (kbd "C-c k i") 'internal-keyboard)
-(global-set-key (kbd "C-c m") 'mu4e)
 (global-set-key (kbd "C-c s") 'sort-lines)
 (global-set-key (kbd "C-c t") 'sr-speedbar-toggle)
 (global-set-key (kbd "C-c u") 'untabify)
 (global-set-key (kbd "C-c w") 'delete-trailing-whitespace)
 (global-set-key (kbd "C-c y") 'bury-buffer)
-
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
 ;; Disable ns-win binding of ns-print-buffer, which causes no end of grief.
@@ -56,27 +50,6 @@
 (global-set-key (kbd "M-g w") 'avy-goto-word-1)
 (global-set-key (kbd "M-g e") 'avy-goto-word-0)
 (avy-setup-default)						;For isearch
-
-;; ;; Bindings that stick around - https://github.com/abo-abo/hydra/wiki
-;; ;; Some bindings are from the hydra examples.
-;; (require 'hydra)
-;; (require 'org-agenda)					;Access to org-agenda-mode-map
-
-;; (defhydra hydra-org-globals ()
-;;   "org"
-;;   ("a" org-agenda "agenda")
-;;   ("b" org-iswitchb "switch buffer")
-;;   ("c" org-capture "capture")
-;;   ("l" org-store-link "store link"))
-;; (global-set-key (kbd "<f5>") 'hydra-org-globals/body)
-;; ;; Was
-
-;; ;; Example 1: text scale
-;; (defhydra hydra-zoom ()
-;;   "zoom"
-;;   ("g" text-scale-increase "in")
-;;   ("l" text-scale-decrease "out"))
-;; (global-set-key (kbd "<f6>") 'hydra-zoom/body)
 
 ;; Modifier bindings
 (defun internal-keyboard ()
@@ -105,7 +78,6 @@
 (setq frame-title-format
       '("" invocation-name ": "(:eval (if (buffer-file-name)
 										  (abbreviate-file-name (buffer-file-name)) "%b"))))
-
 ;; Start up the emacs server process.
 ;(require 'server)
 ;(unless (server-running-p)
@@ -116,10 +88,6 @@
 
 ;; Allow narrowing to proceed without warning.
 (put 'narrow-to-region 'disabled nil)
-
-;; ;; Spaceline - https://github.com/TheBB/spaceline
-;; (require 'spaceline-config)
-;; (spaceline-emacs-theme)
 
 ;; Smart Mode Line - https://github.com/Malabarba/smart-mode-line
 (sml/setup)
@@ -132,106 +100,8 @@
   (occur "[^[:ascii:]]"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Mode-specific configuration
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;; Magit - http://magit.vc/
-(setq magit-last-seen-setup-instructions "1.4.0")
-
-;;;; Magit Gitflow - https://github.com/jtatarik/magit-gitflow
-;; (require 'magit-gitflow)
-;; (add-hook 'magit-mode-hook 'turn-on-magit-gitflow)
-
-;;;; Emmet - https://github.com/smihica/emmet-mode
-(require 'emmet-mode)
-(add-hook 'sgml-mode-hook 'emmet-mode)
-(add-hook 'css-mode-hook 'emmet-mode)
-(eval-after-load "emmet-mode"		;Don't rebind C-j
-  '(define-key emmet-mode-keymap (kbd "C-j") nil))
-
-;;;; Web-Mode - http://web-mode.org/
-(require 'web-mode)
-(setq web-mode-enable-engine-detection t)
-(setq web-mode-engines-alist
-	  '(("ctemplate" . "\\.html\\'")
-		("django" .	"\\.jinja2\\'")
-		("django" . "\\.email\\'")))
-(add-to-list 'auto-mode-alist '("\\.email\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.svg\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.jinja2\\'" . web-mode))
-(add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
-(defun nurk/web-mode-hook ()
-  (setq web-mode-markup-indent-offset 2))
-(add-hook 'web-mode-hook 'nurk/web-mode-hook)
-
-;;;; Helm - https://emacs-helm.github.io/helm/
-(defun enable-helm ()
-  (require 'helm)
-
-  (global-set-key (kbd "C-x C-f") 'helm-find-files)
-  (global-set-key (kbd "C-x b") 'helm-mini)
-  (global-set-key (kbd "M-x") 'helm-M-x)
-  (global-set-key (kbd "M-y") 'helm-show-kill-ring)
-
-  (define-key helm-map (kbd "<tab>") 'helm-execute-persistent-action)
-  (define-key helm-map (kbd "C-i") 'helm-execute-persistent-action)
-  (define-key helm-map (kbd "C-z") 'helm-select-action)
-  (helm-mode 1))
-
-;; (enable-helm)
-
-;;  Ivy -- http://oremacs.com/swiper/
-(defun enable-ivy ()
-  (require 'ivy)
-  (counsel-mode 1)
-  (ivy-mode 1)
-
-  (all-the-icons-ivy-setup)
-
-  (require 'ivy-rich)
-  (ivy-rich-mode 1))
-
-(enable-ivy)
-
-;; Flyspell
-(add-hook 'TeX-mode-hook 'flyspell-mode)
-(add-hook 'org-mode-hook 'flyspell-mode)
-
-(require 'flyspell-correct-ivy)
-(setq flyspell-correct-interface 'flyspell-correct-ivy)
-(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-word-generic)
-
-;;;; JavaScript JS2 - https://github.com/mooz/js2-mode
-(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
-(add-hook 'js2-mode-hook (lambda () (setq comment-start "// ")))
-;(add-hook 'js2-mode-hook #'js2-refactor-mode) ;What is #' ??
-;(js2r-add-keybindings-with-prefix "C-c r")
-
-;;;; AUCTeX - https://www.gnu.org/software/auctex/
-(require 'tex-site)
-(setq TeX-auto-save t)			; Enable parse on save.
-(setq TeX-parse-self t)			; Enable parse on load.
-(setq-default TeX-master nil)		; Query for master file.
-(setq TeX-PDF-mode t)			; Default to PDF
-
-;;;; RefTeX - http://www.gnu.org/software/auctex/reftex.html
-(require 'reftex)
-(add-hook 'LaTeX-mode-hook 'turn-on-reftex)	; For AUCTeX
-(setq reftex-plug-into-AUCTeX t)
-
-;;;; Make AUCTeX aware of latexmk
-(require 'auctex-latexmk)
-(auctex-latexmk-setup)
-
-;; Multiple-cursors - https://github.com/magnars/multiple-cursors.el
-(require 'multiple-cursors)
-(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
-(global-set-key (kbd "C->") 'mc/mark-next-like-this)
-(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
-
 ;;;; Org Mode - http://orgmode.org/
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'load-path "~/Org/elisp")
 (require 'org-slides-notes)
 (require 'org-schedule-course)
@@ -240,10 +110,6 @@
 (global-set-key (kbd "C-c o b") 'org-switchb)
 (global-set-key (kbd "C-c o c") 'org-capture)
 (global-set-key (kbd "C-c o l") 'org-store-link)
-
-;; (require 'org-mac-link)
-;; (add-hook 'org-mode-hook (lambda () (define-key org-mode-map (kbd "C-c g") 'org-mac-grab-link)))
-(require 'ox)
 
 (require 'ob-mongo "~/.emacs.d/src/ob-mongo/ob-mongo.el")
 (add-to-list 'org-babel-load-languages '(mongo . t))
@@ -282,23 +148,102 @@ the beginning of the Org buffer."
 		(format "\\hfill{}\\textsc{%s}"
 				(mapconcat #'org-latex--protect-text tags ":")))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Mode-specific configuration
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;;; Magit - http://magit.vc/
+(setq magit-last-seen-setup-instructions "1.4.0")
+
+;;;; Emmet - https://github.com/smihica/emmet-mode
+(require 'emmet-mode)
+(add-hook 'sgml-mode-hook 'emmet-mode)
+(add-hook 'css-mode-hook 'emmet-mode)
+(eval-after-load "emmet-mode"		;Don't rebind C-j
+  '(define-key emmet-mode-keymap (kbd "C-j") nil))
+
+;;;; Web-Mode - http://web-mode.org/
+(require 'web-mode)
+(setq web-mode-enable-engine-detection t)
+(setq web-mode-engines-alist
+	  '(("ctemplate" . "\\.html\\'")
+		("django" .	"\\.jinja2\\'")
+		("django" . "\\.email\\'")))
+(add-to-list 'auto-mode-alist '("\\.email\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.svg\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.jinja2\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
+(defun nurk/web-mode-hook ()
+  (setq web-mode-markup-indent-offset 2))
+(add-hook 'web-mode-hook 'nurk/web-mode-hook)
+
+;; Ivy -- http://oremacs.com/swiper/
+(require 'ivy)
+(counsel-mode 1)
+(ivy-mode 1)
+(all-the-icons-ivy-setup)
+
+(require 'ivy-rich)
+(ivy-rich-mode 1)
+
+(global-set-key (kbd "C-s") 'swiper)
+(global-set-key (kbd "C-c C-r") 'ivy-resume)
+
+;; Flyspell
+(add-hook 'TeX-mode-hook 'flyspell-mode)
+(add-hook 'org-mode-hook 'flyspell-mode)
+
+(require 'flyspell-correct-ivy)
+(setq flyspell-correct-interface 'flyspell-correct-ivy)
+(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-word-generic)
+
+;; Smart Parens - https://github.com/Fuco1/smartparens
+(require 'smartparens-config)
+(add-hook 'emacs-lisp-mode-hook 'smartparens-mode)
+(add-hook 'js2-mode-hook 'smartparens-mode)
+
+;; Neotree - https://github.com/jaypei/emacs-neotree
+(require 'neotree)
+(setq neo-theme (if (display-graphic-p) 'icons 'arrow))
+(global-set-key (kbd "C-c n") 'neotree-toggle)
+
+;;;; JavaScript JS2 - https://github.com/mooz/js2-mode
+(add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
+(add-hook 'js2-mode-hook (lambda () (setq comment-start "// ")))
+
+;;;; AUCTeX - https://www.gnu.org/software/auctex/
+(require 'tex-site)
+(setq TeX-auto-save t)			; Enable parse on save.
+(setq TeX-parse-self t)			; Enable parse on load.
+(setq-default TeX-master nil)	; Query for master file.
+(setq TeX-PDF-mode t)			; Default to PDF
+
+;;;; RefTeX - http://www.gnu.org/software/auctex/reftex.html
+(require 'reftex)
+(add-hook 'LaTeX-mode-hook 'turn-on-reftex)	; For AUCTeX
+(setq reftex-plug-into-AUCTeX t)
+
+;;;; Make AUCTeX aware of latexmk
+(require 'auctex-latexmk)
+(auctex-latexmk-setup)
+
+;; Multiple-cursors - https://github.com/magnars/multiple-cursors.el
+(require 'multiple-cursors)
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+
 ;;;; Markdown Mode - http://jblevins.org/projects/markdown-mode/
 (add-to-list 'auto-mode-alist '("\\.markdown\\'" . markdown-mode))
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
-
-;;;; Elpy - https://github.com/jorgenschaefer/elpy
-;; (elpy-enable)
-;; (elpy-use-ipython)
-;; (pyvenv-workon "brook")
 
 ;;;; YASnippet - https://github.com/joaotavora/yasnippet
 (require 'yasnippet)
 (yas-global-mode 1)
 
 ;;;; Miscellaneous
-
-;; Open dash documentation for item at point.
-;; (require 'dash-at-point)
 
 ;; Use semantic mode for the speedbar.
 (require 'semantic/sb)
