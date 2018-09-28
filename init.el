@@ -56,32 +56,27 @@
 (global-set-key (kbd "M-g w") 'avy-goto-word-1)
 (global-set-key (kbd "M-g e") 'avy-goto-word-0)
 (avy-setup-default)						;For isearch
-(global-set-key (kbd "C-c C-j") 'avy-resume)
 
-;; Bindings that stick around - https://github.com/abo-abo/hydra/wiki
-;; Some bindings are from the hydra examples.
-(require 'hydra)
-(require 'org-agenda)					;Access to org-agenda-mode-map
+;; ;; Bindings that stick around - https://github.com/abo-abo/hydra/wiki
+;; ;; Some bindings are from the hydra examples.
+;; (require 'hydra)
+;; (require 'org-agenda)					;Access to org-agenda-mode-map
 
-(defhydra hydra-org-globals ()
-  "org"
-  ("a" org-agenda "agenda")
-  ("b" org-iswitchb "switch buffer")
-  ("c" org-capture "capture")
-  ("l" org-store-link "store link"))
-(global-set-key (kbd "<f5>") 'hydra-org-globals/body)
-;; Was
-;;  (global-set-key (kbd "C-c o a") 'org-agenda)
-;;  (global-set-key (kbd "C-c o b") 'org-iswitchb)
-;;  (global-set-key (kbd "C-c o c") 'org-capture)
-;;  (global-set-key (kbd "C-c o l") 'org-store-link)
+;; (defhydra hydra-org-globals ()
+;;   "org"
+;;   ("a" org-agenda "agenda")
+;;   ("b" org-iswitchb "switch buffer")
+;;   ("c" org-capture "capture")
+;;   ("l" org-store-link "store link"))
+;; (global-set-key (kbd "<f5>") 'hydra-org-globals/body)
+;; ;; Was
 
-;; Example 1: text scale
-(defhydra hydra-zoom ()
-  "zoom"
-  ("g" text-scale-increase "in")
-  ("l" text-scale-decrease "out"))
-(global-set-key (kbd "<f6>") 'hydra-zoom/body)
+;; ;; Example 1: text scale
+;; (defhydra hydra-zoom ()
+;;   "zoom"
+;;   ("g" text-scale-increase "in")
+;;   ("l" text-scale-decrease "out"))
+;; (global-set-key (kbd "<f6>") 'hydra-zoom/body)
 
 ;; Modifier bindings
 (defun internal-keyboard ()
@@ -163,6 +158,7 @@
 		("django" . "\\.email\\'")))
 (add-to-list 'auto-mode-alist '("\\.email\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.html\\'" . web-mode))
+(add-to-list 'auto-mode-alist '("\\.svg\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.jinja2\\'" . web-mode))
 (add-to-list 'auto-mode-alist '("\\.php\\'" . web-mode))
 (defun nurk/web-mode-hook ()
@@ -189,9 +185,22 @@
 (defun enable-ivy ()
   (require 'ivy)
   (counsel-mode 1)
-  (ivy-mode 1))
+  (ivy-mode 1)
+
+  (all-the-icons-ivy-setup)
+
+  (require 'ivy-rich)
+  (ivy-rich-mode 1))
 
 (enable-ivy)
+
+;; Flyspell
+(add-hook 'TeX-mode-hook 'flyspell-mode)
+(add-hook 'org-mode-hook 'flyspell-mode)
+
+(require 'flyspell-correct-ivy)
+(setq flyspell-correct-interface 'flyspell-correct-ivy)
+(define-key flyspell-mode-map (kbd "C-;") 'flyspell-correct-word-generic)
 
 ;;;; JavaScript JS2 - https://github.com/mooz/js2-mode
 (add-to-list 'auto-mode-alist '("\\.js\\'" . js2-mode))
@@ -205,7 +214,6 @@
 (setq TeX-parse-self t)			; Enable parse on load.
 (setq-default TeX-master nil)		; Query for master file.
 (setq TeX-PDF-mode t)			; Default to PDF
-(add-hook 'TeX-mode-hook 'flyspell-mode)
 
 ;;;; RefTeX - http://www.gnu.org/software/auctex/reftex.html
 (require 'reftex)
@@ -216,13 +224,24 @@
 (require 'auctex-latexmk)
 (auctex-latexmk-setup)
 
+;; Multiple-cursors - https://github.com/magnars/multiple-cursors.el
+(require 'multiple-cursors)
+(global-set-key (kbd "C-S-c C-S-c") 'mc/edit-lines)
+(global-set-key (kbd "C->") 'mc/mark-next-like-this)
+(global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+(global-set-key (kbd "C-c C-<") 'mc/mark-all-like-this)
+
 ;;;; Org Mode - http://orgmode.org/
 (add-to-list 'load-path "~/Org/elisp")
 (require 'org-slides-notes)
 (require 'org-schedule-course)
 
+(global-set-key (kbd "C-c o a") 'org-agenda)
+(global-set-key (kbd "C-c o b") 'org-switchb)
+(global-set-key (kbd "C-c o c") 'org-capture)
+(global-set-key (kbd "C-c o l") 'org-store-link)
+
 ;; (require 'org-mac-link)
-;; (add-hook 'org-mode-hook 'flyspell-mode)
 ;; (add-hook 'org-mode-hook (lambda () (define-key org-mode-map (kbd "C-c g") 'org-mac-grab-link)))
 (require 'ox)
 
@@ -300,146 +319,9 @@ the beginning of the Org buffer."
 ;; Theming
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;(load-theme 'zenburn)
+;; (load-theme 'zenburn)
 ;; (load-theme 'oceanic)
 ;; (load-theme 'sanityinc-tomorrow-night)
 ;; (load-theme 'spacemacs-dark)
 ;; (load-theme 'spacemacs-light)
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Mail
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;; ;; Try out WanderLust
-;; ; (require 'wl)
-
-;; ;; Using this strategy to install mu/mu4e:
-;; ;;   http://blog.danielgempesaw.com/post/43467552978/installing-mu-and-mu4e-with-homebrew-with-emacs
-;; ;; See also
-;; ;;   http://pragmaticemacs.com/emacs/master-your-inbox-with-mu4e-and-org-mode/
-;; ;;   http://www.macs.hw.ac.uk/~rs46/posts/2014-01-13-mu4e-email-client.html
-
-;; (add-to-list 'load-path "/usr/local/Cellar/mu/1.0/share/emacs/site-lisp/mu/mu4e")
-;; (require 'mu4e)
-;; (require 'org-mu4e)
-
-;; ;; Some settings that I've turned off for one reason or another.
-;; ;; (setq mu4e-headers-leave-behavior 'apply)
-;; ;; (add-hook 'mu4e-compose-mode-hook 'org~mu4e-mime-switch-headers-or-body)
-;; ;; (setq org-mu4e-convert-to-html t)
-
-;; (setq org-mu4e-link-query-in-headers-mode nil)
-
-;; (add-to-list 'mu4e-view-actions
-;; 			 '("ViewInBrowser" . mu4e-action-view-in-browser) t)
-
-;; (setq nurk/fancy-sig (concat "Tom Nurkkala, PhD\n"
-;; 							 "Associate Professor, Computer Science and Engineering\n"
-;; 							 "Director, Center for Missions Computing\n"
-;; 							 "Taylor University\n"))
-;; (setq nurk/simple-sig "Tom Nurkkala\n")
-
-;; (setq mu4e-contexts
-;; 	  `( ,(make-mu4e-context
-;; 		   :name "Nurk Net"
-;; 		   :match-func (lambda (msg)
-;; 						 (when msg
-;; 						   (mu4e-message-contact-field-matches msg :to "@nurknet.com")))
-;; 		   :vars `((user-mail-address . "tom@nurknet.com")
-;; 				   (mu4e-sent-folder . "/nurknet/Sent")
-;; 				   (mu4e-trash-folder . "/nurknet/Trash")
-;; 				   (mu4e-refile-folder . "/nurknet/Archive")
-;; 				   (mu4e-compose-signature . ,nurk/simple-sig)))
-;; 		 ,(make-mu4e-context
-;; 		   :name "Department"
-;; 		   :match-func (lambda (msg)
-;; 						 (when msg
-;; 						   (mu4e-message-contact-field-matches msg :to "@cse.taylor.edu")))
-;; 		   :vars `((user-mail-address . "tnurkkala@cse.taylor.edu")
-;; 				   (mu4e-sent-folder . "/cse/Sent")
-;; 				   (mu4e-trash-folder . "/cse/Trash")
-;; 				   (mu4e-refile-folder . "/cse/Archive")
-;; 				   (mu4e-compose-signature . ,nurk/fancy-sig)))
-;; 		 ,(make-mu4e-context
-;; 		   :name "Campus"
-;; 		   :match-func (lambda (msg)
-;; 						 (when msg
-;; 						   (mu4e-message-contact-field-matches msg :to "@taylor.edu")))
-;; 		   :vars `((user-mail-address . "thnurkkala@taylor.edu")
-;; 				   (mu4e-sent-folder . "/campus/Sent")
-;; 				   (mu4e-trash-folder . "/campus/Trash")
-;; 				   (mu4e-refile-folder . "/campus/Archive")
-;; 				   (mu4e-compose-signature . ,nurk/fancy-sig)))
-;; 		 ,(make-mu4e-context
-;; 		   :name "Gmail"
-;; 		   :match-func (lambda (msg)
-;; 						 (when msg
-;; 						   (mu4e-message-contact-field-matches msg :to "@gmail.com")))
-;; 		   :vars `((user-mail-address . "tom.nurkkala@gmail.com")
-;; 				   (mu4e-sent-folder . "/gmail/[Gmail].Sent Mail")
-;; 				   (mu4e-trash-folder . "/gmail/[Gmail].Trash")
-;; 				   (mu4e-refile-folder . "/gmail/[Gmail].Archive")
-;; 				   (mu4e-compose-signature . ,nurk/simple-sig)))
-;; 		 ))
-
-;; (defun nurk/mu4e-compose-stuff ()
-;;   "My settings for message composition."
-;;   (set-fill-column 72)
-;;   (flyspell-mode))
-
-;; (add-hook 'mu4e-compose-mode-hook 'nurk/mu4e-compose-stuff)
-
-;; (defun nurk/mark-spam (msg ignore)
-;;   "Mark messages flagged as spam."
-;;   (with-temp-buffer
-;;     (insert-file-contents (mu4e-message-field msg :path))
-;;     (goto-char (point-min))
-;;     (if (re-search-forward "^X-Spam-Flag: \\(.*\\)" nil t 1)
-;; 		(string= (downcase (match-string 1)) "yes")
-;;       nil)))
-
-;; (add-to-list 'mu4e-headers-custom-markers
-;; 			 '("Spam" nurk/mark-spam))
-
-;; ;; Stuff from before mu4e added contexts
-
-;; ;; (setq nurk/mu4e-account-list
-;; ;;       '(("campus"
-;; ;; 		 (user-mail-address "tnurkkala@cse.taylor.edu")
-;; ;; 		 (message-signature-file "cse.txt"))
-;; ;; 		("cse"
-;; ;; 		 (user-mail-address "tnurkkala@cse.taylor.edu")
-;; ;; 		 (message-signature-file "cse.txt"))
-;; ;; 		("gmail"
-;; ;; 		 (user-mail-address "tom.nurkkala@gmail.com")
-;; ;; 		 (message-signature-file "gmail.txt"))
-;; ;; 		("nurknet"
-;; ;; 		 (user-mail-address "tom@nurknet.com")
-;; ;; 		 (message-signature-file "nurknet.txt"))
-;; ;; 		))
-
-;; ;; (defun nurk/mu4e-set-account ()
-;; ;;   "Set the account for composing a message."
-;; ;;   (let* ((account
-;; ;;           (if mu4e-compose-parent-message
-;; ;; 			  ;; Set account based on parent message (if there is one).
-;; ;;               (let ((maildir (mu4e-message-field mu4e-compose-parent-message :maildir)))
-;; ;;                 (string-match "/\\(.*?\\)/" maildir)
-;; ;;                 (match-string 1 maildir))
-;; ;; 			;; Set account by asking user.
-;; ;;             (completing-read (format "Compose with account: (%s) "
-;; ;;                                      (mapconcat #'(lambda (var) (car var))
-;; ;;                                                 nurk/mu4e-account-list "/"))
-;; ;;                              (mapcar #'(lambda (var) (car var)) nurk/mu4e-account-list)
-;; ;;                              nil t nil nil (caar nurk/mu4e-account-list))))
-;; ;; 		 ;; Look up variables associated with account.
-;; ;;          (account-vars (cdr (assoc account nurk/mu4e-account-list))))
-;; ;;     (if account-vars
-;; ;; 		;; Found the account; set up variables.
-;; ;;         (mapc #'(lambda (var)
-;; ;;                   (set (car var) (cadr var)))
-;; ;;               account-vars)
-;; ;;       ;; Doh: no such account!
-;; ;;       (error "No email account found"))))
-
-;; ;; (add-hook 'mu4e-compose-pre-hook 'nurk/mu4e-set-account)

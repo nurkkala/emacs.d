@@ -84,6 +84,9 @@
  '(ido-enable-tramp-completion nil)
  '(indicate-buffer-boundaries (quote left))
  '(indicate-empty-lines t)
+ '(ivy-count-format "(%d/%d)")
+ '(ivy-height 15)
+ '(ivy-use-virtual-buffers t)
  '(jedi:complete-on-dot t)
  '(jedi:setup-keys t)
  '(jinja2-user-keywords (quote ("topic" "section" "subsection")))
@@ -282,7 +285,7 @@
  '(org-use-tag-inheritance nil)
  '(package-selected-packages
    (quote
-	(counsel ivy smart-mode-line-powerline-theme smart-mode-line avy helm-swoop js2-mode magit paradox yasnippet auctex s org htmlize oceanic-theme js-comint exec-path-from-shell sublimity ag hydra zenburn-theme org-mime emacsql-mysql emacsql-sqlite emacsql slime color-theme-sanityinc-tomorrow cuda-mode bbdb homebrew-mode ox-asciidoc ox-rst toc-org hl-spotlight typescript-mode yaml-mode xkcd web-mode web-completion-data undo-tree swiper stem ssh-config-mode ssh sr-speedbar spacemacs-theme spaceline solarized-theme rich-minority restclient projectile pdf-tools paredit ox-tufte ox-pandoc ox-gfm org-trello org-ref org-mac-link org-bullets org-beautify-theme offlineimap nginx-mode mu4e-maildirs-extension math-symbol-lists markdown-toc markdown-preview-mode magit-gitflow link less-css-mode latex-preview-pane json-mode js3-mode js2-refactor highlight-indentation hide-lines helm-ls-git helm-descbinds helm-dash helm-chrome goto-chg gitignore-mode ggtags flycheck-pyflakes find-file-in-project fill-column-indicator epc emmet-mode dict-tree dash-at-point csv-mode css-mode coffee-mode auto-complete auctex-latexmk adoc-mode)))
+	(flyspell-correct-ivy impatient-mode flycheck markdown-mode all-the-icons-ivy ivy-hydra ivy-rich multiple-cursors counsel ivy smart-mode-line-powerline-theme smart-mode-line avy helm-swoop js2-mode magit paradox yasnippet auctex s org htmlize oceanic-theme js-comint exec-path-from-shell sublimity ag hydra zenburn-theme org-mime emacsql-mysql emacsql-sqlite emacsql slime color-theme-sanityinc-tomorrow cuda-mode bbdb homebrew-mode ox-asciidoc ox-rst toc-org hl-spotlight typescript-mode yaml-mode xkcd web-mode web-completion-data undo-tree swiper stem ssh-config-mode ssh sr-speedbar spacemacs-theme spaceline solarized-theme rich-minority restclient projectile pdf-tools paredit ox-tufte ox-pandoc ox-gfm org-trello org-ref org-mac-link org-bullets org-beautify-theme offlineimap nginx-mode mu4e-maildirs-extension math-symbol-lists markdown-toc markdown-preview-mode magit-gitflow link less-css-mode latex-preview-pane json-mode js3-mode js2-refactor highlight-indentation hide-lines helm-ls-git helm-descbinds helm-dash helm-chrome goto-chg gitignore-mode ggtags flycheck-pyflakes find-file-in-project fill-column-indicator epc emmet-mode dict-tree dash-at-point csv-mode css-mode coffee-mode auto-complete auctex-latexmk adoc-mode)))
  '(paradox-automatically-star t)
  '(paradox-github-token "9b9177438faa75f2f3a2a65411fe03ec5edb1450")
  '(preview-default-preamble
@@ -315,6 +318,21 @@
  '(show-paren-mode t)
  '(show-trailing-whitespace nil)
  '(size-indication-mode t)
+ '(sml/replacer-regexp-list
+   (quote
+	(("^~/org" ":Org:")
+	 ("^~/\\.emacs\\.d/elpa/" ":ELPA:")
+	 ("^~/\\.emacs\\.d/" ":ED:")
+	 ("^/sudo:.*:" ":SU:")
+	 ("^~/Documents/" ":Doc:")
+	 ("^~/Dropbox/" ":DB:")
+	 ("^:\\([^:]*\\):Documento?s/" ":\\1/Doc:")
+	 ("^~/[Gg]it/" ":Git:")
+	 ("^~/[Gg]it[Hh]ub/" ":Git:")
+	 ("^~/[Gg]it\\([Hh]ub\\|\\)-?[Pp]rojects/" ":Git:")
+	 ("^~/Taylor/Classes/2018-2019/Fall/COS-243-MWAD/" ":MWAD:")
+	 ("^~/Taylor/Classes/2018-2019/Fall/COS-343-ADBC/" ":ADBC:")
+	 ("^~/Taylor/Classes/2018-2019/Fall/COS-436-PDC/" ":PDC:"))))
  '(smtpmail-queue-dir "~/Mail/queue/cur")
  '(smtpmail-queue-mail nil)
  '(smtpmail-smtp-server "smtp.webfaction.com")
